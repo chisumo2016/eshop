@@ -15,7 +15,6 @@ class ProductSeeder extends Seeder
     {
         Product::create([
             'title' => 'Elit reprehenderit eu nostrud et.',
-            'slug' => 'Elit-reprehenderit-eu-nostrud et.',
             'price' => 19.03,
             'quantity' => 3,
             'category_id'=> 1,
