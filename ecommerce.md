@@ -132,3 +132,26 @@
         .updated_at 
 
 # SHOW PRODUCTS LISTS IN ADMIN DASHBOARD
+    - Make AdminSeeder
+        php artisan make:seeder AdminSeeder
+        php artisan make:seeder BrandSeeder
+        php  artisan make:seeder CategorySeeder
+        php  artisan make:seeder ProductSeeder
+        php  artisan db:seed 
+        php  artisan migrate:fresh --seed 
+
+    - Instll slug package
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
