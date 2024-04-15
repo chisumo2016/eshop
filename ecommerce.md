@@ -132,6 +132,7 @@
         .updated_at 
 
 # SHOW PRODUCTS LISTS IN ADMIN DASHBOARD
+    https://flowbite.com/blocks/application/advanced-tables/
     - Make AdminSeeder
         php artisan make:seeder AdminSeeder
         php artisan make:seeder BrandSeeder
@@ -141,6 +142,9 @@
         php  artisan migrate:fresh --seed 
 
     - Instll slug package
+
+    - Setup the Side navigation on admin dashbaord
+    - Create Product  Controller route
         
 
 

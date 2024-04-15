@@ -19,10 +19,12 @@ onMounted(() => {
         <!-- Sidebar -->
             <Sidebar/>
         <!-- end-->
+        <main class="p-4 md:ml-64 h-auto pt-20">
+            <!--Slot-->
+            <slot/>
+            <!--end Slot-->
+        </main>
 
-        <!--Slot-->
-        <slot/>
-        <!--end Slot-->
     </div>
 </template>
 
