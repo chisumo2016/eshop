@@ -148,14 +148,31 @@
 
     - Show the product in index.
         
-# ADD PRODUCT WIITH MULTIPLE IMAGES
+# ADD PRODUCT WIITH MULTIPLE IMAGES 1
     https://element-plus.org/en-US/component/upload.html
     https://element-plus.org/en-US/guide/quickstart.html
     https://element-plus.org/en-US/component/dialog.html
     https://inertiajs.com/manual-visits
     npm install element-plus --save
 
+          modified:   app/Http/Controllers/Admin/ProductController.php
+            modified:   app/Http/Middleware/HandleInertiaRequests.php
+            modified:   app/Models/Brand.php
+            modified:   app/Models/Category.php
+            modified:   app/Models/Product.php
+            modified:   app/Models/ProductImage.php
+            modified:   ecommerce.md
+            modified:   package-lock.json
+            modified:   package.json
+            modified:   resources/js/Pages/Admin/Products/ProductList.vue
+            modified:   resources/js/Pages/Admin/components/sidebar.vue
+            modified:   resources/js/app.
 
+# ADD PRODUCT WITH MULTIPLE IMAGES 2
+        https://element-plus.org/en-US/component/upload.html
+     modified:   app/Http/Controllers/Admin/ProductController.php
+	modified:   ecommerce.md
+	modified:   resources/js/Pages/Admin/Products/ProductList.vue
 
 
 

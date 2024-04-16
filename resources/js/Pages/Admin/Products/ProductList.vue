@@ -24,7 +24,12 @@ const category_id = ref('')
 const brand_id = ref('')
 const inStock = ref('')
 
+/*Upload Multiple Image**/
 const productImages = ref([])
+const dialogImageUrl = ref('')
+
+/*Upload Multiple Image**/
+//const fileList  =ref([])
 
 /**Open Modal**/
 const openAddModal = () =>{
@@ -44,7 +49,7 @@ const openEditModal = (product) => {
 
 }
 
-/*Add Producr method**/
+/*Add Product method**/
 const AddProduct =  async () => {
     const formData  = new  FormData();
     formData.append('title', title.value);
@@ -96,6 +101,20 @@ const resetFormData  = () =>{
         ///dialogVisible.value = ''
 }
 
+// File to upload Multiple Images
+const handleFileChange = (file) => {
+    console.log(file.raw)
+  productImages.value.push(file);
+}
+
+const handlePictureCardPreview = (file) => {
+    dialogImageUrl.value = file.url
+     dialogVisible.value = true
+}
+
+const handleRemove = (file) => {
+    console.log(file)
+}
 //console.log(products)
 </script>
 
@@ -351,7 +370,7 @@ const resetFormData  = () =>{
                    </select>
                </div>
 <!--                md:grid-cols-6 md:gap-6-->
-                <div class="grid  w-full">
+                <div class="grid md:gap-6">
                     <div class="relative z-0 w-full mb-5 group">
 
                         <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Description</label>
@@ -359,13 +378,24 @@ const resetFormData  = () =>{
 
                     </div>
                 </div>
-                <div
 
-                    class="grid md:grid-cols-2 md:gap-6">
-                <button
-
-                    type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+        <!--   Multiple Images Upload-->
+                <div class="grid md:gap-6">
+                    <div class="relative z-0 w-full mb-5 group">
+                        <el-upload
+                            :on-change="handleFileChange"
+                            v-model:file-list="productImages"
+                            list-type="picture-card"  multiple
+                            :on-preview="handlePictureCardPreview"
+                            :on-remove="handleRemove"
+                        >
+                            <el-icon><Plus /></el-icon>
+                        </el-upload>
+                    </div>
                 </div>
+
+                <button
+                    type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
             </form>
 
             <!--   End       -->

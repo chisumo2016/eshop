@@ -42,6 +42,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        //dd( $request->file('product_images'));
        $product =  Product::create([
             'title' => request('title'),
             'price' => request('price'),
