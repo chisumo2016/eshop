@@ -204,7 +204,20 @@
 	modified:   resources/js/Pages/Admin/Products/ProductList.vue
 	modified:   routes/web.php
 
-# 
+# USER HOME PAGE UI SETUP
+    https://flowbite.com/docs/components/navbar/
+    https://flowbite.com/docs/components/footer/
+    https://flowbite.com/docs/getting-started/vue/
+    https://tailwindui.com/components/ecommerce/components/product-lists
+    https://flowbite.com/blocks/marketing/hero/
+     http://eshop.test/
+    php artisan make:controller User/UserController  
+
+     modified:   app/Http/Middleware/HandleInertiaRequests.php
+	 modified:   ecommerce.md
+	 modified:   routes/web.php
+	 app/Http/Controllers/User/UserController 
+	  resources/js/Pages/User/Layoi
         
 
 
