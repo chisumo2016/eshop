@@ -145,9 +145,15 @@
 
     - Setup the Side navigation on admin dashbaord
     - Create Product  Controller route
+
+    - Show the product in index.
         
-
-
+# ADD PRODUCT WIITH MULTIPLE IMAGES
+    https://element-plus.org/en-US/component/upload.html
+    https://element-plus.org/en-US/guide/quickstart.html
+    https://element-plus.org/en-US/component/dialog.html
+    https://inertiajs.com/manual-visits
+    npm install element-plus --save
 
 
 
