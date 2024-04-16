@@ -218,7 +218,16 @@
 	 modified:   routes/web.php
 	 app/Http/Controllers/User/UserController 
 	  resources/js/Pages/User/Layoi
+
+# SETUP AUTHENTICATION  USER HEADER
+    https://flowbite.com/docs/components/badge/
+    http://eshop.test/
+    Link to show regiter 
+    Link to show login
+    Once the user has regoster , cart  icon will be shown
         
+    https://heroicons.com/ 
+    modified:   resources/js/Pages/User/Layouts/Header.vue
 
 
 
