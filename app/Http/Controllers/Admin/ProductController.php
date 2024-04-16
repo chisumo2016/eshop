@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('category', 'brand','productImages')->get();  //all()
         $categories = Category::all();
         $brands = Brand::all();
 
@@ -93,7 +93,52 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        /**Check if products has images upload*/
+        if ($request->hasFile('product_images')) {
+            $productImages = $request->file('product_images');
+            /*Loop through each uploaded image*/
+            foreach ($productImages as $productImage) {
+                /**Generate a unique name for the image using timestamp and random string*/
+                $uniqueName = time() . '_' .Str::random(10) . '.' . $productImage->getClientOriginalName();
+                /**Store the image in the public folder with unique name*/
+                $productImage->move('product_images', $uniqueName);
+                //$productImage->move(public_path('storage/product_images'), $uniqueName);
+                /**Create a new product  image record with the product_id abd unique name*/
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image' => 'product_images/' .$uniqueName
+                ]);
+            }
+        }
+
+//        if ($request->hasFile('product_images')) {
+//            $productImages = $request->file('product_images');
+//            // Loop through each uploaded image
+//            foreach ($productImages as $image) {
+//                // Generate a unique name for the image using timestamp and random string
+//                $uniqueName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+//
+//                // Store the image in the public folder with the unique name
+//                $image->move('product_images', $uniqueName);
+//
+//                // Create a new product image record with the product_id and unique name
+//                ProductImage::create([
+//                    'product_id' => $product->id,
+//                    'image' => 'product_images/' . $uniqueName,
+//                ]);
+//            }
+//        }
+
+        $product->update([
+            'title' => $request->title,
+            'price' => $request->price,
+            'quantity' =>$request->quantity,
+            'description' =>$request->description,
+            'category_id' =>$request->category_id,
+            'brand_id' =>$request->brand_id,
+        ]);
+
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
 
     /**
@@ -102,5 +147,12 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function deleteAvatar($id)
+    {
+        $image = ProductImage::where('id', $id)->delete();
+
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
 }

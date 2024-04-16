@@ -170,11 +170,26 @@
 
 # ADD PRODUCT WITH MULTIPLE IMAGES 2
         https://element-plus.org/en-US/component/upload.html
-     modified:   app/Http/Controllers/Admin/ProductController.php
-	modified:   ecommerce.md
-	modified:   resources/js/Pages/Admin/Products/ProductList.vue
+         modified:   app/Http/Controllers/Admin/ProductController.php
+        modified:   ecommerce.md
+        modified:   resources/js/Pages/Admin/Products/ProductList.vue
 
+# MODERN ECOMMERCE : LARAVEL VUEJS INERTIA.JS AND TAILWINDSCSS
+    https://flowbite.com/docs/components/avatar/
+    -- need to show the category insteadd of numbers in ui
+        <td class="px-4 py-3">{{ product.category_id}}</td> TO
+        <td class="px-4 py-3">{{ product.category.name}}</td>
+        <td class="px-4 py-3">{{           {{ product.inStock}}}}</td>
+    - load the relationship in Prodduct Cponttroller
+    - https://flowbite.com/docs/components/buttons/
+            pulished button
 
+                 modified:   app/Http/Controllers/Admin/ProductController.php
+                modified:   ecommerce.md
+                modified:   resources/js/Pages/Admin/Products/ProductList.vue
+                modified:   routes/web.php
+
+    
 
 
 

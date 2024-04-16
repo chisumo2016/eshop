@@ -8,9 +8,11 @@ import {ref} from "vue";
 const products  = usePage().props.products
 const categories  = usePage().props.categories
 const brands  = usePage().props.brands
+
 const isAddProduct = ref(false)
-const dialogVisible = ref(false)
+
 const editModel = ref(false)
+const dialogVisible = ref(false)
 
 /**Product form data*/
 const id = ref('');
@@ -43,6 +45,18 @@ const openAddModal = () =>{
 /**Edit Modal**/
 const openEditModal = (product) => {
     console.log(product);
+
+
+    /**Update our Data**/
+    id.value    = product.id;
+    title.value = product.title;
+    price.value     = product.price;
+    quantity.value  = product.quantity;
+    description.value = product.description;
+    brand_id.value = product.brand_id.value;
+    category_id.value = product.category_id;
+    product_images.value = product.product_images
+
     editModel.value = true
     isAddProduct.value = false
     dialogVisible.value = true
@@ -93,12 +107,9 @@ const resetFormData  = () =>{
         price.value = '';
         quantity.value = '';
         description.value = '';
-        published.value = '';
-        category_id.value = '';
-        brand_id.value = '';
-        inStock.value = '';
         productImages.value = []
-        ///dialogVisible.value = ''
+        dialogImageUrl.value=''
+        //dialogVisible.value = ''
 }
 
 // File to upload Multiple Images
@@ -116,6 +127,61 @@ const handleRemove = (file) => {
     console.log(file)
 }
 //console.log(products)
+
+/*Delete Singe Image**/
+const deleteImage = async (image , index) => {
+    try {
+        await router.delete('/admin/products/image/' + image.id, {
+            onSuccess: (page) => {
+                product_images.value.splice(index, 1);
+                Swal.fire({
+                    toast: true,
+                    icon: "success",
+                    position: "top-end",
+                    showConfirmButton: false,
+                    title: page.props.flash.success
+                });
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}
+/**Update product s**/
+const updateProduct = async  () => {
+    const formData = new FormData();
+    formData.append('title', title.value);
+    formData.append('price', price.value);
+    formData.append('quantity', quantity.value);
+    formData.append('description', description.value);
+    formData.append('category_id', category_id.value);
+    formData.append('brand_id', brand_id.value);
+    formData.append("_method", 'PUT');
+
+    // Append product images to the FormData
+    for (const image of productImages.value) {
+        formData.append('product_images[]', image.raw);
+    }
+
+    try {
+        await router.post('products/update/' + id.value, formData, {
+            onSuccess: (page) => {
+                dialogVisible.value = false;
+                resetFormData();
+                Swal.fire({
+                    toast: true,
+                    icon: "success",
+                    position: "top-end",
+                    showConfirmButton: false,
+                    title: page.props.flash.success
+                });
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
+
+}
 </script>
 
 <template>
@@ -219,34 +285,51 @@ const handleRemove = (file) => {
                         </thead>
                         <tbody>
                         <tr
-                            v-for="product in  products"
+                            v-for="product in products"
                             :key="product.id"
                             class="border-b dark:border-gray-700">
                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ product.title}}</th>
 
-                            <td class="px-4 py-3">{{ product.category_id}}</td>
-                            <td class="px-4 py-3">{{ product.brand_id}}</td>
+                            <td class="px-4 py-3">{{ product.category.name}}</td>
+                            <td class="px-4 py-3">{{ product.brand.name}}</td>
                             <td class="px-4 py-3">{{ product.quantity}}</td>
-                            <td class="px-4 py-3">{{ product.price}}</td>
-                            <td class="px-4 py-3">{{ product.inStock}}</td>
-                            <td class="px-4 py-3">{{ product.published}}</td>
-
+                            <td class="px-4 py-3"> {{ product.price}} </td>
+                            <td class="px-4 py-3">
+                                <span v-if="product.inStock == 0" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">In Stock</span>
+                                <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">Out of Stock</span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <button
+                                    v-if="product.published == 1"
+                                    type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Published</button>
+                                <button
+                                    v-else
+                                    type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Unpublished</button>
+                                {{ product.published}}
+                            </td>
+    <!--                apple-imac-27-dropdown            -->
                             <td class="px-4 py-3 flex items-center justify-end">
-                                <button id="apple-imac-27-dropdown-button" data-dropdown-toggle="apple-imac-27-dropdown" class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
+                                <button :id="`${product.id}-button`"
+                                        :data-dropdown-toggle="`${product.id}`"
+                                        class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
                                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
                                     </svg>
                                 </button>
-                                <div id="apple-imac-27-dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                                    <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-27-dropdown-button">
+                                <div
+                                    :id="`${product.id}`"
+                                     class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+                                    <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                                        :aria-labelledby="`${product.id}-button`">
                                         <li>
                                             <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show</a>
                                         </li>
                                         <li>
-                                            <button
-
-                                                @click="openEditModal(product)"
-                                                class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</button>
+<!--                                            <a @click="openEditModal(product)" href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>-->
+                                            <a
+                                                href="#"
+                                                 @click="openEditModal(product)"
+                                                class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
                                         </li>
                                     </ul>
                                     <div class="py-1">
@@ -255,7 +338,6 @@ const handleRemove = (file) => {
                                 </div>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -308,11 +390,11 @@ const handleRemove = (file) => {
             v-model="dialogVisible"
             :title="editModel ? 'Edit Product' : 'Add Product'"
             width="50%"
-            :before-close="handleClose" >
+            :before-close="handleClose">
 
             <!--  form start -->
             <form
-                @submit.prevent="AddProduct"
+                @submit.prevent="editModel ? updateProduct() :  AddProduct()"
                 class="max-w-md mx-auto">
                 <div class="relative z-0 w-full mb-5 group">
                     <input
@@ -394,19 +476,26 @@ const handleRemove = (file) => {
                     </div>
                 </div>
 
+        <!--   List of Images for selected product-->
+               <div class="flex flex-nowrap mb-8">
+                   <div
+                       v-for="(image , index) in product_images"
+                       :key="image.id"
+                       class="relative w-24   h-24 ">
+                       <img class="w-24  h-24  rounded" :src="`/${image.image}`" alt="">
+                       <span class="absolute top-0 right-8 transform -translate-y-1/2 w-3.5 h-3.5 bg-red-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
+                       <span
+                           @click="deleteImage(image, index)"
+                             class="text-white text-xs font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">x</span>
+
+                   </div>
+               </div>
+        <!--  end -->
+
                 <button
                     type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
             </form>
 
-            <!--   End       -->
-            <!-- <template #footer>
-                 <div class="dialog-footer">
-                     <el-button @click="dialogVisible = false">Cancel</el-button>
-                     <el-button type="primary" @click="dialogVisible = false">
-                         Confirm
-                     </el-button>
-                 </div>
-             </template> -->
          </el-dialog>
      </section>
  </template>

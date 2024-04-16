@@ -44,6 +44,8 @@ Route::middleware(['auth' , 'admin'])->prefix('admin')->group(function () {
     //Route::resource('product', ProductController::class);
     Route::get('/products', [ProductController::class, 'index'])->name('admin.products.index');
     Route::post('/products/store',[ProductController::class,'store'])->name('admin.products.store');
+    Route::put('/products/update/{product}',[ProductController::class,'update'])->name('admin.products.update');
+    Route::delete('/products/image/{id}',[ProductController::class,'deleteAvatar'])->name('admin.products.image.delete');
 });
 
 require __DIR__.'/auth.php';
