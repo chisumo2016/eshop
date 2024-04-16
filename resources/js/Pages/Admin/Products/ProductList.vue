@@ -3,9 +3,13 @@
 
 import {router ,usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
+import { Plus } from '@element-plus/icons-vue'
 //import Swal from "sweetalert2";
 
-const products  = usePage().props.products
+//const products  = usePage().props.products
+defineProps({
+    products: Array
+})
 const categories  = usePage().props.categories
 const brands  = usePage().props.brands
 
@@ -182,6 +186,40 @@ const updateProduct = async  () => {
     }
 
 }
+
+/**Delete product*/
+const deleteProduct = (product, index) => {
+    Swal.fire({
+        title: 'Are you Sure',
+        text: "This actions cannot undo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'no',
+        confirmButtonText: 'yes, delete!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            try {
+                router.delete('products/destroy/' + product.id, {
+                    onSuccess: (page) => {
+                        this.delete(product, index);
+                        Swal.fire({
+                            toast: true,
+                            icon: "success",
+                            position: "top-end",
+                            showConfirmButton: false,
+                            title: page.props.flash.success
+                        });
+                    }
+                })
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    })
+
+}
 </script>
 
 <template>
@@ -333,7 +371,10 @@ const updateProduct = async  () => {
                                         </li>
                                     </ul>
                                     <div class="py-1">
-                                        <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
+                                        <a
+                                            @click="deleteProduct(product, index)"
+                                            href="#"
+                                            class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
                                     </div>
                                 </div>
                             </td>

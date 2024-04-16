@@ -189,10 +189,23 @@
                 modified:   resources/js/Pages/Admin/Products/ProductList.vue
                 modified:   routes/web.php
 
-    
+# FIX BUGS  IIN PRODUCTS  LISTS UI AND DELETE FUNCTION FOR PRODUCT ADMIN PANNEL
+    Add the product  ,it  doesnnt  update the  UI until u refresh the page
+    SOLN
+         <ProductList  /> TO
+         <ProductList :products="products" />
 
+    Change the  code 
+        const products  = usePage().props.products TO
 
+    modified:   app/Http/Controllers/Admin/ProductController.php
+	modified:   ecommerce.md
+	modified:   resources/js/Pages/Admin/Products/Index.vue
+	modified:   resources/js/Pages/Admin/Products/ProductList.vue
+	modified:   routes/web.php
 
+# 
+        
 
 
 

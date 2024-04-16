@@ -146,13 +146,16 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
-    }
-
-    public function deleteAvatar($id)
-    {
-        $image = ProductImage::where('id', $id)->delete();
+        $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
+    }
+
+    public function deleteAvatar(ProductImage $productImage)
+    {
+        //$image = ProductImage::where('id', $id)->delete();
+        $productImage->delete();
+
+        return redirect()->route('admin.products.index')->with('success', 'Image deleted successfully.');
     }
 }
