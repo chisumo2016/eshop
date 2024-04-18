@@ -17,8 +17,8 @@ onMounted(() => {
 <!---Header -->
 <Header/>
 <!---End -->
-<!---Hero -->
-<Hero/>
+<!---Hero removed put into index-->
+
 <!---End -->
 <!---Main -->
 <slot/>

@@ -274,3 +274,57 @@
         app/Helper/
         app/Http/Controllers/User/CartController.php
         app/Http/Resources/
+                 app/Http/Resources/BrandResource.php
+                create mode 100644 app/Http/Resources/CartResource.php
+                create mode 100644 app/Http/Resources/CategoryResource.php
+                create mode 100644 app/Http/Resources/ProductImageResource.php
+                create mode 100644 app/Http/Resources/ProductResource.php
+
+# FIX ERROR FOR GUEST USER ADD TO CART
+    foreach() arguments must be of  type array|object, null given
+         $ids = Arr::pluck($cartItems, 'product_id');
+
+# MANAGE CART IN CART DETAIL SUCH AS INCREASE OR DECREASE QTY IN CART ITEM
+        https://tailblocks.cc/
+        https://flowbite.com/docs/components/tables/#table-with-products
+    -Increase the quantity of cart item
+    -Decrease the quantity of cart item
+
+            $user = $request->user();
+        if ($user){
+            $cartItems = CartItem::where('user_id', $user->id)->get();
+            $userAddress = UseAddress::where('user_id', $user->id)->where('isMain', 1)->first();
+            if ($cartItems->count() > 0){
+                return  Inertia::render('User/CartList', [
+                    'cartItems' => $cartItems,
+                    'userAddress' => $userAddress,
+                ]); //User/Cart/Index
+            }
+
+        }else{
+
+            $cartItems = Cart::getCookiesCartItems();
+            if (count($cartItems) >0 ){
+                $cartItems = new CartResource(Cart::getProductsAndCartItems());
+
+                return  Inertia::render('User/CartList', [
+                    'cartItems' => $cartItems,
+                ]); //User/Cart/Index
+            }else{
+                /**no items **/
+
+                return redirect()->back();
+            }
+        }
+
+                     modified:   app/Helper/Cart.php
+                    modified:   app/Http/Controllers/User/CartController.php
+                    modified:   app/Models/UseAddress.php
+                    modified:   ecommerce.md
+                    modified:   resources/js/Pages/User/Index.vue
+                    modified:   resources/js/Pages/User/Layouts/Header.vue
+                    modified:   resources/js/Pages/User/Layouts/UserLayout.vue
+                    modified:   routes/web.php
+
+                   resources/js/Pages/User/CartList.vue
+

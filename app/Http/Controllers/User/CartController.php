@@ -4,18 +4,51 @@ namespace App\Http\Controllers\User;
 
 use App\Helper\Cart;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartResource;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\UseAddress;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, Product $product)
     {
-        //
+        //dd('ddd');
+        $user = $request->user();
+        if ($user){
+            $cartItems = CartItem::where('user_id', $user->id)->get();
+            $userAddress = UseAddress::where('user_id', $user->id)->where('isMain',1)->first();
+            if ($cartItems->count() > 0){
+                return  Inertia::render('User/CartList', [
+                    'cartItems' => $cartItems,
+                    'userAddress' => $userAddress,
+                ]); //User/Cart/Index
+            }
+        }
+        /**Guest**/
+        else{
+
+            $cartItems = Cart::getCookiesCartItems();
+            if (count($cartItems) > 0 ){
+                $cartItems = new CartResource(Cart::getProductsAndCartItems());
+
+                return  Inertia::render('User/CartList', [
+                    'cartItems' => $cartItems,
+                ]);
+            }else{
+                /**no items **/
+
+                return redirect()->back();
+            }
+        }
+
+
+
     }
 
 
@@ -85,7 +118,7 @@ class CartController extends Controller
              foreach ($cartItems as &$item){
                  if ($item['product_id'] === $product->id){
                      /**Increase the quantity*/
-                     $item['quantity'] += $quantity;
+                     $item['quantity'] = $quantity;
                         break;
                  }
              }
@@ -102,7 +135,8 @@ class CartController extends Controller
     {
         $user = $request->user();
         if ($user){
-            CartItem::query()->where(['user_id', $user->id, 'product_id' =>$product->id])->first()?->delete();
+            //CartItem::query()->where(['user_id', $user->id, 'product_id' =>$product->id])->first()?->delete();
+            CartItem::query()->where(['user_id' => $user->id, 'product_id' => $product->id])->first()?->delete();
             if (CartItem::count() < 0){
                 return redirect()->route('home')->with('info', 'Your cart is empty!');
             }else{

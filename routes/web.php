@@ -29,7 +29,7 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::get('view', 'index')->name('cart.view');
     Route::post('store/{product}', 'store')->name('cart.store');
     Route::patch('update/{product}', 'update')->name('cart.update');
-    Route::delete('update/{product}', 'delete')->name('cart.delete');
+    Route::delete('update/{product}', 'destroy')->name('cart.delete');
 });
 
 /*Admin Routes*/

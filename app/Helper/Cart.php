@@ -17,6 +17,7 @@ class Cart
         if ($user = auth()->user()) {
             return CartItem::whereUserId($user->id)->count();  //->sum('quantity');
         }else {
+            /**Guest User*/
             return array_reduce(self::getCookiesCartItems(), fn ($carry) => $carry + 1, 0);
         }
     }
@@ -30,6 +31,7 @@ class Cart
                 'quantity'   => $item->quantity
             ]);
         }else{
+            /**Guest User*/
             return self::getCookiesCartItems();
         }
     }
@@ -37,7 +39,7 @@ class Cart
     //Guest
     public static function getCookiesCartItems()
     {
-        return json_decode(request()->cookie('cookies_cart_items' ,'[]'), true);
+        return json_decode(request()->cookie('cart_items' ,'[]'), true);
     }
 
     public static function setCookieCartItems(array $cartItems)
@@ -105,7 +107,7 @@ class Cart
 
         $ids = Arr::pluck($cartItems, 'product_id');
         $products = Product::whereIn('id', $ids)->with('productImages')->get();
-        $cartItems = Arr::keyBy($products, 'product_id');
+        $cartItems = Arr::keyBy($cartItems, 'product_id');
 
         return  [$products, $cartItems];
     }
