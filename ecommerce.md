@@ -229,6 +229,48 @@
     https://heroicons.com/ 
     modified:   resources/js/Pages/User/Layouts/Header.vue
 
+# ADD TO CART  BY AUTHENTICATED  USER OR GUEST
+        https://github.com/Crinsane/LaravelShoppingcart
+    - Add the icon on index.vue - cart
+    - Add route
+    - Add CartController
+        p artisan make:controller User/CartController
+        Non-static method App\Helper\Cart::getProductsAndCartItems() cannot be called statically
 
+        public static function saveCookieCartItems(){
+         if (!empty($saveCartItems)) {
+            CartItem::insert($saveCartItems);  //CartItem::insert((array)$saveCartItems)
+            $saveCartItems = [];
+            foreach (self::getCookiesCartItems() as $cartItem) {
 
+                if (isset($userCartItems[$cartItem['product_id']])){
+                    $userCartItems[$cartItem['product_id']]->update(['quantity' => $cartItem['quantity']]);
+                    continue;
+                }
+                /**Add CartItems**/
+                $saveCartItems[] = [
+                    'user_id'     => $cartItem,
+                    'product_id' => $cartItem['product_id'],
+                    'quantity'   => $cartItem['quantity'],
 
+                ];
+            }
+            if (!empty($saveCartItems)) {
+                CartItem::insert($saveCartItems);
+
+            }
+        }
+
+        modified:   app/Http/Middleware/HandleInertiaRequests.php
+        modified:   app/Models/CartItem.php
+        modified:   app/Models/Product.php
+        modified:   app/Models/ProductImage.php
+        modified:   app/Models/User.php
+        modified:   ecommerce.md
+        modified:   resources/js/Pages/User/Index.vue
+        modified:   resources/js/Pages/User/Layouts/Header.vue
+        modified:   routes/web.php
+
+        app/Helper/
+        app/Http/Controllers/User/CartController.php
+        app/Http/Resources/
