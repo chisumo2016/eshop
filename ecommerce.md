@@ -328,3 +328,22 @@
 
                    resources/js/Pages/User/CartList.vue
 
+# PRODUCTS FILTERS BY BRANDS , CATEGORIES AND PRICE RANGE
+    https://tailwindui.com/components/ecommerce/components/category-filters
+    https://flowbite.com/blocks/application/filter/
+    npm install @heroicons/vue
+    npm i @headlessui/vue
+    Create  new controller called User/ProductListController
+        php artisan make:controller User/ProductListController -r
+
+    modified:   app/Models/Product.php
+	modified:   ecommerce.md
+	modified:   package-lock.json
+	modified:   package.json
+	modified:   resources/js/Pages/User/Index.vue
+	modified:   routes/web.php
+
+
+        app/Http/Controllers/User/ProductListController.php
+        resources/js/Pages/User/ProductList.vue
+        resources/js/Pages/User/components/
