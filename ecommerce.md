@@ -357,6 +357,16 @@
         composer require stripe/stripe-php
         composer require stripe/stripe-php
 
+#  SETUP USER ORDER  LIST DASHBOARD AND AUTH HEADER
+        modified:   app/Models/Order.php
+        modified:   app/Models/OrderItem.php
+        modified:   ecommerce.md
+        modified:   resources/js/Pages/User/Layouts/Header.vue
+        modified:   routes/web.php    
+
+         app/Http/Controllers/User/DashboardController.php
+	      resources/js/Pages/User/Dashboard.vue
+
 
 
 
